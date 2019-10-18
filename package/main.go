@@ -7,5 +7,5 @@ import (
 
 //https://www.yuque.com/baxiang/golang/package
 func main() {
-	fmt.Println(utils.EncodeMD5("hello golang"))
+	fmt.Println(utils.EncodeMD5(""))
 }
