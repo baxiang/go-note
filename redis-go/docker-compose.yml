@@ -1,0 +1,15 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+       - '6379:6379'
+    command: redis-server
+    restart: always
+
+  web:
+    image: baxiang/redis-web
+    container_name: redis-web
+    ports:
+      - '8090:8090'
