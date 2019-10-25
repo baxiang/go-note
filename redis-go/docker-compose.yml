@@ -9,7 +9,9 @@ services:
     restart: always
 
   web:
-    image: baxiang/redis-web
+    build: .
+    depends_on:
+      - redis
     container_name: redis-web
     ports:
       - '8090:8090'
