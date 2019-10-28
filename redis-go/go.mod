@@ -1,4 +1,4 @@
-module github.com/baxiang/go-note/redis-go
+module github.com/baxiang/redis-go
 
 go 1.12
 
