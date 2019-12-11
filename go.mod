@@ -3,7 +3,8 @@ module github.com/baxiang/go-note
 go 1.12
 
 require (
-	github.com/gin-gonic/gin v1.5.0 // indirect
+	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.8 // indirect
