@@ -7,6 +7,7 @@ github.com/gin-gonic/gin
 github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
+github.com/gin-gonic/gin/testdata/protoexample
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
@@ -30,6 +31,8 @@ github.com/mohae/deepcopy
 github.com/ugorji/go/codec
 # golang.org/x/sys v0.0.0-20191210023423-ac6580df4449
 golang.org/x/sys/unix
+# gopkg.in/go-playground/validator.v8 v8.18.2
+gopkg.in/go-playground/validator.v8
 # gopkg.in/go-playground/validator.v9 v9.30.2
 gopkg.in/go-playground/validator.v9
 # gopkg.in/yaml.v2 v2.2.7
