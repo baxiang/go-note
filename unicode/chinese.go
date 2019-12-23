@@ -23,5 +23,5 @@ func ChineseStr(query string) bool {
 	return true
 }
 func main() {
-    fmt.Println(ChineseStr("你好世界111"))
+    fmt.Println(ChineseStr("你好世界hello"))
 }
