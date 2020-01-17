@@ -12,5 +12,5 @@ func main() {
 		id := c.Query("id")
 		c.JSON(http.StatusOK,gin.H{"name":name,"id":id})
 	})
-    router.Run(":8090")
+    router.Run()
 }
