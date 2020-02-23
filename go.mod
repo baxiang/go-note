@@ -17,6 +17,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/tsliwowicz/go-wrk v0.0.0-20190307083600-9e85e2e35df0 // indirect
 	golang.org/x/crypto v0.0.0-20191219195013-becbf705a915 // indirect
 	golang.org/x/sys v0.0.0-20191220220014-0732a990476f // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
