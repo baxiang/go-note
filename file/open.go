@@ -14,7 +14,7 @@ func main() {
 	buf := make([]byte, 1024)
 
 	for {
-		n, err := file.Read(buf)
+		_, err := file.Read(buf)
 		if len(buf) > 0 {
 			fmt.Println(string(buf))
 		}
