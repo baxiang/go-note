@@ -1,0 +1,1 @@
+protoc  --micro_out=. --go_out=plugins=grpc:. hello.proto

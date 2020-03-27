@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/baxiang/go-note/micro-hello/hello"
 	proto "github.com/baxiang/go-note/micro-hello/proto"
 	"github.com/micro/go-micro"
 )
@@ -17,7 +18,7 @@ func main() {
 	g := proto.NewGreeterService("greeter", service.Client())
 
 	// Call the greeter
-	rsp, err := g.Hello(context.Background(),&proto.Request{Name:"micro"} )
+	rsp, err := g.Hello(context.Background(),&hello.Request{Name: "micro"} )
 	if err != nil {
 		fmt.Println(err)
 	}

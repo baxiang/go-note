@@ -8,6 +8,8 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -105,7 +107,9 @@ func init() {
 	proto.RegisterType((*HelloResponse)(nil), "proto.HelloResponse")
 }
 
-func init() { proto.RegisterFile("hello.proto", fileDescriptor_61ef911816e0a8ce) }
+func init() {
+	proto.RegisterFile("hello.proto", fileDescriptor_61ef911816e0a8ce)
+}
 
 var fileDescriptor_61ef911816e0a8ce = []byte{
 	// 130 bytes of a gzipped FileDescriptorProto
@@ -122,11 +126,11 @@ var fileDescriptor_61ef911816e0a8ce = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // HelloServiceClient is the client API for HelloService service.
 //
@@ -136,10 +140,10 @@ type HelloServiceClient interface {
 }
 
 type helloServiceClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewHelloServiceClient(cc *grpc.ClientConn) HelloServiceClient {
+func NewHelloServiceClient(cc grpc.ClientConnInterface) HelloServiceClient {
 	return &helloServiceClient{cc}
 }
 
@@ -155,6 +159,14 @@ func (c *helloServiceClient) Hello(ctx context.Context, in *HelloRequest, opts .
 // HelloServiceServer is the server API for HelloService service.
 type HelloServiceServer interface {
 	Hello(context.Context, *HelloRequest) (*HelloResponse, error)
+}
+
+// UnimplementedHelloServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedHelloServiceServer struct {
+}
+
+func (*UnimplementedHelloServiceServer) Hello(ctx context.Context, req *HelloRequest) (*HelloResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
 }
 
 func RegisterHelloServiceServer(s *grpc.Server, srv HelloServiceServer) {
