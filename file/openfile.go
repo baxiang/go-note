@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 )
 
 func main() {
-	file, e := os.Open("./test.txt")
+	file, e := os.Open("test.txt")
 	if e!=nil {
-		fmt.Println(e.Error())
+		log.Fatal(e.Error())
 	}
 	defer file.Close()
 }
