@@ -1,15 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
-	//done := make(chan int)
-
-	go func(){
+	c := make(chan int,1)
+	go func(c chan int){
+		c<-1
 		fmt.Println("你好, 世界")
-		//done<-1
-	}()
-
-	//<-done
+		<-c
+	}(c)
+	time.Sleep(2*time.Second)
 }
 
