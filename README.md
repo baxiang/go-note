@@ -3,6 +3,7 @@
 
 |文章|代码地址|笔记地址|
 |---|---|---|
-|struct||https://www.yuque.com/baxiang/go/ggu33a|
+|函数/function||https://www.yuque.com/baxiang/go/dr9wbt|
+|结构体/struct||https://www.yuque.com/baxiang/go/ggu33a|
 
 
