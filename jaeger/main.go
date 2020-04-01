@@ -26,7 +26,6 @@ func main() {
 	}
 	opentracing.SetGlobalTracer(tracer)
 	defer closer.Close()
-
 	parent := opentracing.GlobalTracer().StartSpan("hello")
 	defer parent.Finish()
 	child := opentracing.GlobalTracer().StartSpan(

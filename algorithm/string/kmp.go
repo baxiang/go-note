@@ -5,10 +5,6 @@ func main() {
 }
 
 
-func kmp(str,findStr string)int{
-
-
-}
 
 func next(findStr string)(next map[int]int){
 
