@@ -18,7 +18,6 @@ flag :
 func foo(){
 	var s = "hello world"
 	goto flag
-
 	fmt.Println(s)
 flag:
 	s = "hello golang"
