@@ -1,8 +1,8 @@
 package main
 
-import(
-	"time"
+import (
 	"fmt"
+	"time"
 )
 
 func foo(ch chan<- string){
@@ -17,8 +17,8 @@ func bar(ch chan<- string){
 func main() {
 	f :=make(chan string)
 	b :=make(chan string)
-	go foo(f)
 	go bar(b)
+	go foo(f)
 	// 会出现阻塞
 	select {
 	  case r :=<-f:
