@@ -1,7 +1,9 @@
 package main
 
-import ("encoding/json"
-"fmt")
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Response struct {
 	Code int         `json:"code"`
