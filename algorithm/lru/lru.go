@@ -23,14 +23,14 @@ func NewLRUCache(capacity int)*LRUCache{
 	return l
 }
 // 双链表在头部插入数据
-func (l *LRUCache)insert(node *Node){
+func (l *LRUCache)insertHead(node *Node){
 	tmp := l.head.next
 	l.head.next = node
 	node.next = tmp
 	tmp.prev = node
 	node.prev = l.head
 }
-// 双链表插入数据
+// 双链表删除数据
 func (l *LRUCache)remove(node *Node){
 	n := node.next// 获取后节点
 	p := node.prev // 获取前节点
@@ -43,7 +43,7 @@ func (l *LRUCache)remove(node *Node){
 func(l *LRUCache)Get(key int)int{
 	if n,ok:=l.cache[key];ok{
 		l.remove(n)
-		l.insert(n)
+		l.insertHead(n)
 		return n.val
 	}
 	return -1
@@ -52,7 +52,7 @@ func(l *LRUCache)Put(key int,value int){
 	if n,ok:=l.cache[key];ok{
 		n.val =value
 		l.remove(n)
-		l.insert(n)
+		l.insertHead(n)
 	}else {
 		if len(l.cache)==l.cap {//需要判断当前容器是否已经满了
 			deleteNode := l.tail.prev
@@ -63,7 +63,7 @@ func(l *LRUCache)Put(key int,value int){
 			key:  key,
 			val:  value,
 		}
-		l.insert(n)
+		l.insertHead(n)
 		l.cache[key]= n
 	}
 }
