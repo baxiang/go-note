@@ -4,8 +4,8 @@ import (
 	"github.com/baxiang/go-note/gprc/model"
 	"log"
 	"net"
-	"net/http"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 type Operation struct {
@@ -23,10 +23,18 @@ func (o *Operation) Sub(req model.OperationReq, resp *model.OperationResp) error
 
 func main() {
 	rpc.Register(&Operation{})
-	rpc.HandleHTTP()
-	lis, err := net.Listen("tcp", "127.0.0.1:8080")
+	lis, err := net.Listen("tcp", ":8081")
 	if err != nil {
 		log.Fatalln("fatal error: ", err)
 	}
-	http.Serve(lis, nil)
+	for {
+		conn, err := lis.Accept() // 接收客户端连接请求
+		if err != nil {
+			continue
+		}
+
+		go func(conn net.Conn) { // 并发处理客户端请求
+			jsonrpc.ServeConn(conn)
+		}(conn)
+	}
 }

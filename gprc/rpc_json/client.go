@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"github.com/baxiang/go-note/gprc/model"
 	"log"
-	"net/rpc"
+	"fmt"
+	"net/rpc/jsonrpc"
 )
 
 func main() {
-	conn, err := rpc.DialHTTP("tcp", "127.0.0.1:8080")
+	conn, err := jsonrpc.Dial("tcp", "127.0.0.1:8081")
 	if err != nil {
 		log.Fatalln("http error: ", err)
 	}
