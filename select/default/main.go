@@ -17,13 +17,17 @@ func main() {
 	b :=make(chan string)
 	go bar(b)
 	go foo(f)
-	// 执行默认结果
-	select {
-	case r :=<-f:
-		fmt.Println(r)
-	case r :=<-b:
-		fmt.Println(r)
-	 default:
-		fmt.Println("default")
+	// 1执行default 2 然后会随机打印<-f 或者<-b
+	for {
+		select {
+		case r :=<-f:
+			fmt.Println(r)
+			return
+		case r :=<-b:
+			fmt.Println(r)
+			return
+		default:
+			fmt.Println("default")
+		}
 	}
 }
