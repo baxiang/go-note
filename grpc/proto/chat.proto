@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pb;
+
+message ChatReq {
+    string input = 1;
+}
+message ChatRes {
+    string output = 1;
+}
+
+//方法
+service Chat {
+    //关键字stream指定启用流特性 stream 支持双向流 Send(),Recv()
+    rpc Hello (stream ChatReq) returns (stream ChatRes);
+}
