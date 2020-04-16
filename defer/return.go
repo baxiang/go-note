@@ -1,28 +1,21 @@
 package main
 
-import "fmt"
-
-var name string = "go"
-
-//func myfunc() string {
-//	defer func() {
-//		name = "python"
-//	}()
-//	fmt.Printf("myfunc 函数里的name：%s\n", name)
-//	return name
-//}
-
-func myfuncTwo() (s string) {
-	s = name
+func f1() int {
+	var result int
 	defer func() {
-		s = "python"
-	}()
-	fmt.Printf("myfunc 函数里的name：%s\n", s)
-	return s
-}
+		result++
 
+	}()
+	return result
+}
+func f2() (result int) {
+	defer func() {
+		result++
+	}()
+	return
+}
+// GOOS=linux GOARCH=amd64 go tool compile -N -l -S return.go >return.s 2>&1
 func main() {
-	myname := myfuncTwo()
-	fmt.Printf("main 函数里的name: %s\n", name)
-	fmt.Println("main 函数里的myname: ", myname)
+	f1()
+	f2()
 }

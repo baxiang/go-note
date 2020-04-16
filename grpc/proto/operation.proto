@@ -1,0 +1,19 @@
+syntax = "proto3";
+package pb;
+
+// 算术运算请求结构
+message operaRequest {
+    int32 a = 1;
+    int32 b = 2;
+}
+
+message operaResponse {
+    int32 result = 1;  //结果
+
+}
+
+// rpc方法
+service operaService {
+    rpc add (operaRequest) returns (operaResponse);    // 加法运算
+    rpc sub (operaRequest) returns (operaResponse);      //减法运算
+}
