@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	c   = make(chan struct{}, 1) //容量为1的缓冲信道
+	c  = make(chan struct{}, 1) //容量为1的缓冲信道
 	sum int
 )
 
@@ -20,8 +20,8 @@ func increment(x int, wg *sync.WaitGroup) {
 func main() {
 	var wg sync.WaitGroup
 	v := 100
-	wg.Add(v)
 	for i := 1; i <= v; i++ {
+		wg.Add(1)
 		go increment(i, &wg)
 	}
 	wg.Wait()
