@@ -1,23 +1,36 @@
 package main
 
-import "fmt"
-
-func index(a []int, t int)int {
-	 left := 0
-	 right := len(a)-1
-	for left<=right  {
-		mid :=left+(right-left)/2
-		if a[mid]==t {
-			return mid
-		}else if a[mid]>t {
-			right = mid-1
-		}else {
-			left = mid+1
+import (
+	"fmt"
+)
+func quickSort(a []int)[]int{
+	if len(a)<=1{
+		return a
+	}
+	pro := a[0]
+	mid :=[]int{}
+	left :=[]int{}
+	right :=[]int{}
+	for i:=0;i<len(a);i++{
+		if a[i]==pro{
+			mid = append(mid,a[i])
+		}else if a[i]<pro{
+			right = append(right,a[i])
+		}else{
+			left = append(left,a[i])
 		}
 	}
-	return left
+	left = quickSort(left)
+	left = append(left,mid...)
+	right = quickSort(right)
+	return append(left,right...)
+}
+
+func searchK(a []int,k int)int{
+	a = quickSort(a)
+	return a[k-1]
 }
 
 func main() {
-   fmt.Println(index([]int{1,7,17,19},10))
+	fmt.Println(searchK([]int{4,2,3},1))
 }
