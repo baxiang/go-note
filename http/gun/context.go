@@ -13,6 +13,7 @@ type Context struct {
 	Req *http.Request
 	Path string
 	Method string
+	Params map[string]string
 	StatusCode int
 }
 
@@ -25,6 +26,10 @@ func NewContext(w http.ResponseWriter,req *http.Request)*Context{
 	}
 }
 
+func(c *Context)Param(key string)string{
+	value,_:=c.Params[key]
+	return value
+}
 
 func(c *Context)SetHeader(key,value string){
 	c.Writer.Header().Set(key,value)
@@ -33,7 +38,6 @@ func (c *Context)SetStatusCode(statusCode int){
 	c.StatusCode = statusCode
 	c.Writer.WriteHeader(statusCode)
 }
-
 
 func(c *Context)JSON(statusCode int,obj interface{}){
 	c.SetHeader("Content-Type","application/json")
