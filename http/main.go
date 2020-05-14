@@ -1,22 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"github.com/baxiang/go-note/http/gun"
 	"net/http"
 )
 
-func IndexHandle(w http.ResponseWriter,r *http.Request){
-	fmt.Fprintf(w,"path = %s\n",r.URL.Path)
-}
-func HelloHandle(w http.ResponseWriter,r *http.Request){
-	fmt.Fprintf(w,"%v\n",r.Header)
-
-}
-
 func main() {
 	r := gun.New()
-	r.Get("/",IndexHandle)
-	r.Get("/hello",HelloHandle)
+	r.Get("/", func(c *gun.Context) {
+		c.String(http.StatusOK, "index = %s\n", c.Path)
+	})
+	r.Get("/hello", func(c *gun.Context) {
+		c.JSON(http.StatusOK,gun.H{"hello":"world"})
+	})
 	r.Run(":8090")
 }
