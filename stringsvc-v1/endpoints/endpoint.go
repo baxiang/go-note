@@ -21,7 +21,7 @@ type CountRequest struct {
 type countResponse struct {
 	V int `json:"v"`
 }
-type commonResponse struct {
+type CommonResponse struct {
 	Message string      `json:"message"`
 	Code    int         `json:"code"`
 	Data    interface{} `json:"data"`
@@ -32,9 +32,9 @@ func MakeUppercaseEndpoint(svc service.StringService) endpoint.Endpoint {
 		req := request.(UppercaseRequest)
 		v, err := svc.Uppercase(req.S)
 		if err != nil {
-			return commonResponse{Data: nil, Message: err.Error(), Code: 1000}, nil
+			return CommonResponse{Data: nil, Message: err.Error(), Code: 1000}, nil
 		}
-		return commonResponse{Data: uppercaseResponse{v}, Message: "success", Code: 0}, nil
+		return CommonResponse{Data: uppercaseResponse{v}, Message: "success", Code: 0}, nil
 	}
 }
 
@@ -42,6 +42,6 @@ func MakeCountEndpoint(svc service.StringService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(CountRequest)
 		v := svc.Count(req.S)
-		return commonResponse{Data: countResponse{v}, Message: "", Code: 0}, nil
+		return CommonResponse{Data: countResponse{v}, Message: "", Code: 0}, nil
 	}
 }

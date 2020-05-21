@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+
+type ServiceMiddleware func(StringService)StringService
+
 type StringService interface {
 	Uppercase(string) (string, error)
 	Count(string) int
