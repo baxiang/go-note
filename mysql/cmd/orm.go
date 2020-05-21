@@ -26,4 +26,12 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
+	row := s.Raw("SELECT DATABASE()").QueryRow()
+	var tableName string
+	if err := row.Scan(&tableName); err == nil {
+		log.Println(tableName)
+	} else {
+		log.Fatal(err)
+	}
 }

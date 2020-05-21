@@ -2,18 +2,22 @@ package session
 
 import (
 	"database/sql"
+	"github.com/baxiang/mysql-go/orm/dialect"
+	"github.com/baxiang/mysql-go/orm/schema"
 	"strings"
 	"log"
 )
 
 type Session struct {
 	db *sql.DB // sql 句柄
+	dialect dialect.Dialect
+	refTable *schema.Schema
 	sql strings.Builder // sql 语句
 	sqlVars []interface{} // SQL 语句中占位符的对应值
 }
 
-func New(db *sql.DB)*Session{
-	return &Session{db: db}
+func New(db *sql.DB,dialect dialect.Dialect)*Session{
+	return &Session{db: db,dialect: dialect}
 }
 
 func (s *Session)Clear(){
