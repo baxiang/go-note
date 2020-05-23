@@ -32,7 +32,7 @@ func (*DiscoveryServiceImpl) SayHello() string {
 	return "Hello World!"
 }
 
-func (service *DiscoveryServiceImpl) DiscoveryService(ctx context.Context, serviceName string) ([]interface{}, error)  {
+func (service *DiscoveryServiceImpl) DiscoveryService(_ context.Context, serviceName string) ([]interface{}, error)  {
 
 	instances := service.discoveryClient.DiscoverServices(serviceName, config.Logger)
 
