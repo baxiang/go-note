@@ -3,6 +3,7 @@ module github.com/baxiang/go-note/micro-api
 go 1.13
 
 require (
+	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f // indirect
 	github.com/gin-gonic/gin v1.6.2 // indirect
 	github.com/golang/protobuf v1.3.5
 	github.com/google/gofuzz v1.1.0 // indirect
