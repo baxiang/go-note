@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pb;
+
+message StringRequest{
+  string A = 1;
+  string B = 2;
+}
+message StringResponse {
+  string Ret = 1;
+  string err = 2;
+}
+
+service StringService{
+  rpc Concat(StringRequest) returns(StringResponse){}
+  rpc Diff(StringRequest) returns(StringResponse){}
+}
