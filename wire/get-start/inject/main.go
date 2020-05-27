@@ -1,19 +1,25 @@
 package main
 
+import "fmt"
+
+type FightParam string
+type MonsterParam string
+
+
 type Monster struct {
 	Name string
 }
 
-func NewMonster(name string) Monster {
-	return Monster{Name: name}
+func NewMonster(name MonsterParam) Monster {
+	return Monster{Name: string(name)}
 }
 
 type Fighter struct {
 	Name string
 }
 
-func NewFighter(name string) Fighter {
-	return Fighter{Name: name}
+func NewFighter(name FightParam) Fighter {
+	return Fighter{Name: string(name)}
 }
 
 type Mission struct {
@@ -21,9 +27,9 @@ type Mission struct {
 	Monster Monster
 }
 
-func NewMission(p Fighter, m Monster) Mission {
+func NewMission(f Fighter, m Monster) Mission {
 	return Mission{
-		Fighter: p,
+		Fighter: f,
 		Monster: m,
 	}
 }
@@ -33,8 +39,6 @@ func (m Mission) start() {
 }
 
 func main() {
-	monster := NewMonster("kitty")
-	fighter := NewFighter("Ultraman")
-	mission := NewMission(fighter, monster)
+	mission := InitMission(FightParam("kitty"),MonsterParam("Ultraman"))
 	mission.start()
 }
