@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"github.com/baxiang/go-miro-practice/internal/pkg/utils/netutil"
 	consulApi "github.com/hashicorp/consul/api"
 	"github.com/opentracing/opentracing-go"
 	"github.com/spf13/viper"
@@ -12,6 +13,10 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
+	"fmt"
+	"github.com/pkg/errors"
+	"log"
+	"net"
 )
 
 type ServerOptions struct {
@@ -75,3 +80,95 @@ func NewGrpcServer(o *ServerOptions, logger *zap.Logger, init InitServers, consu
 	}, nil
 }
 
+func (s *Server) Application(name string) {
+	s.app = name
+}
+
+func (s *Server) Start() error {
+	s.port = s.o.Port
+	if s.port == 0 {
+		s.port = netutil.GetAvailablePort()
+	}
+
+	s.host = netutil.GetLocalIP4()
+
+	if s.host == "" {
+		return errors.New("get local ipv4 error")
+	}
+
+	addr := fmt.Sprintf("%s:%d", s.host, s.port)
+
+	s.logger.Info("grpc server starting ...", zap.String("addr", addr))
+	go func() {
+		lis, err := net.Listen("tcp", addr)
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+
+		if err := s.server.Serve(lis); err != nil {
+			s.logger.Fatal("failed to serve: %v", zap.Error(err))
+		}
+	}()
+
+	if err := s.register(); err != nil {
+		return errors.Wrap(err, "register grpc server error")
+	}
+
+	return nil
+}
+
+func (s *Server) register() error {
+	addr := fmt.Sprintf("%s:%d", s.host, s.port)
+
+	for key, _ := range s.server.GetServiceInfo() {
+		check := &consulApi.AgentServiceCheck{
+			Interval:                       "10s",
+			DeregisterCriticalServiceAfter: "60m",
+			TCP:                            addr,
+		}
+
+		id := fmt.Sprintf("%s[%s:%d]", key, s.host, s.port)
+
+		svcReg := &consulApi.AgentServiceRegistration{
+			ID:                id,
+			Name:              key,
+			Tags:              []string{"grpc"},
+			Port:              s.port,
+			Address:           s.host,
+			EnableTagOverride: true,
+			Check:             check,
+			Checks:            nil,
+		}
+
+		err := s.consulCli.Agent().ServiceRegister(svcReg)
+		if err != nil {
+			return errors.Wrap(err, "register service error")
+		}
+		s.logger.Info("register grpc service success", zap.String("id", id))
+	}
+
+	return nil
+}
+
+func (s *Server) deRegister() error {
+	for key, _ := range s.server.GetServiceInfo() {
+		id := fmt.Sprintf("%s[%s:%d]", key, s.host, s.port)
+
+		err := s.consulCli.Agent().ServiceDeregister(id)
+		if err != nil {
+
+			return errors.Wrapf(err, "deregister service error[id=%s]", id)
+		}
+		s.logger.Info("deregister service success ", zap.String("id", id))
+	}
+	return nil
+}
+
+func (s *Server) Stop() error {
+	s.logger.Info("grpc server stopping ...")
+	if err := s.deRegister(); err != nil {
+		return errors.Wrap(err, "deregister grpc server error")
+	}
+	s.server.GracefulStop()
+	return nil
+}

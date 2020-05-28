@@ -8,7 +8,9 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 )
+
 var ProviderSet = wire.NewSet(NewLogger, NewOptions)
+
 type Options struct {
 	Filename string
 	MaxSize int
