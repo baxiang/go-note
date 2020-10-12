@@ -1,8 +1,8 @@
 module github.com/baxiang/go-note/grpc-hello
 
-go 1.13
+go 1.14
 
 require (
-	github.com/golang/protobuf v1.3.5
-	google.golang.org/grpc v1.28.0
+	github.com/golang/protobuf v1.4.2
+	google.golang.org/grpc v1.32.0
 )
