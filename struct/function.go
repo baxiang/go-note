@@ -3,8 +3,6 @@ package main
 import "fmt"
 
 
-
-
 type StudentFun struct {
 	name string
 	age  int
