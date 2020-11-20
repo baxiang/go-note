@@ -1,5 +1,4 @@
 module github.com/baxiang/redis-go
-
 go 1.12
 
 require (

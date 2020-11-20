@@ -19,6 +19,10 @@ func main() {
 	fmt.Printf("%v\n",a)
 	fmt.Printf("slice header: %#v\naddress of a: %p\n &a[0]: %p \n  &a: %p\n sh:%p \n",
 		sh, a, &a[0],&a, sh)
+    var list map[string]string
+    fmt.Println(isNil(list))
+}
 
-
+func isNil(l interface{})bool{
+	return l==nil
 }
