@@ -1,30 +1,14 @@
 package main
 
 import (
+	"fmt"
+	_ "github.com/go-sql-driver/mysql" // import your used driver
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-    "github.com/jmoiron/sqlx"
 	"strings"
-	"fmt"
-	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql" // import your used driver
+	"time"
 )
-type Rule struct {
 
-
-	TenantID int `gorm:"type:bigint NOT NULL"`
-
-	RuleClassID int `gorm:"type:bigint NOT NULL"`
-
-	Enabled   bool   `gorm:"type:tinyint NOT NULL"`
-	RuleName  string `gorm:"type:varchar(20) NOT NULL"`
-	RuleDesc  string `gorm:"type:varchar(200) NOT NULL"`
-	RuleScore int    `gorm:"type:bigint NOT NULL"`
-}
-type user struct {
-	Id int64
-	Username string
-}
 func LikeFieldEscape(value string) string {
 	value = strings.Replace(value, ";", "\\;", -1)
 	value = strings.Replace(value, "\"", "\\\"", -1)
@@ -35,87 +19,73 @@ func LikeFieldEscape(value string) string {
 	value = strings.Replace(value, "_", "\\_", -1)
 	return value
 }
+
+type Department struct{
+	ID int
+	Name string
+}
+
+type Major struct {
+	ID int
+	DepartID int
+	Name string
+}
+type Student struct {
+	ID        uint `gorm:"primarykey"`
+	Name string `gorm:"size:20"`
+	Gender int `gorm:"size:4"`
+	Number string `gorm:"type:char(8);uniqueIndex:uk_num"`
+	DepartID uint `gorm:"size:32;not null;index:idx_dep"`
+	MajorID uint `gorm:"size:32;not null;index:idx_major"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 func main() {
-	dsn := "root:123456@tcp(127.0.0.1:3306)/gateway?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:123456@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err!=nil{
 		fmt.Println(err.Error())
 	}
+	//db.Logger.LogMode(4)
+	////db.AutoMigrate(&Student{})
+	//stu :=&Student{
+	//	ID: 1,
+	//}
+    //db.Debug().First(&stu)
+	//fmt.Println(stu)
+	//createStu :=&Student{
+	//	Name:      "秦寿生",
+	//	Gender:    1,
+	//	Number:    "20200003",
+	//	DepartID:  3,
+	//	MajorID:   1,
+	//}
+	//db.Debug().Create(&createStu)
+	//fmt.Println(createStu.ID)
+
+	//upd :=&Student{
+	//	ID: 2,
+	//	Number:    "20200005",
+	//	MajorID:   1,
+	//}
+	db.Debug().Model(&Student{}).
+		//Select("number").
+		//Where("major_id = ?",1).
+		Updates(map[string]interface{}{"depart_id": 4,"number": "20200009"})
 
 	//sql :="%"
-	sql := LikeFieldEscape("%")
-	//sql := fmt.Sprintf("/%%")
-	var list []user
-	err = db.Debug().Table("userinfo").Where("username LIKE ? ", sql).Find(&list).Error
-	if err!=nil{
-		fmt.Println(err.Error())
-	}
-
-	fmt.Println(len(list))
-    //for _,v :=range list{
-	//	fmt.Printf("%d-%s\n",v.Id,v.Username)
-	//}
-  // initBeego()
-
-
-
-   //initDB()
-}
-
-
-
-
-func initDB()  {
-	dsn := "root:123456@tcp(127.0.0.1:3306)/gateway?charset=utf8mb4&parseTime=True"
-	// 也可以使用MustConnect连接不成功就panic
-	db, err := sqlx.Connect("mysql", dsn)
-	if err != nil {
-		fmt.Printf("connect DB failed, err:%v\n", err)
-		return
-	}
-	db.SetMaxOpenConns(20)
-	db.SetMaxIdleConns(10)
-
-	sqlStr := "select id, username from userinfo where username LIKE concat('%',?,'%');"
-	var list []user
-	err = db.Select(&list, sqlStr, "%")
-	if err != nil {
-		fmt.Printf("get failed, err:%v\n", err)
-		return
-	}
-	for _, v := range list {
-		fmt.Printf("%d-%s\n",v.Id,v.Username)
-	}
-}
-
-func init() {
-	//orm.RegisterDriver("mysql", orm.DRMySQL)
-
-	err := orm.RegisterDataBase("default", "mysql", "root:123456@tcp(127.0.0.1:3306)/gateway?charset=utf8mb4&parseTime=True",
-	)
-	if err!=nil{
-		fmt.Println(err.Error())
-		return
-	}
-}
-func initBeego(){
-
-	orm.Debug = true
-	o := orm.NewOrm()
-
-	var users []user
-	num, err := o.Raw("SELECT id, username FROM userinfo WHERE username LIKE ? escape '/'", "/%").QueryRows(&users)
-	if err == nil {
-		fmt.Println("user nums: ", num)
-	}
-	//// 获取 QuerySeter 对象，user 为表名
-	//qs := o.QueryTable("userinfo")
+	////sql = LikeFieldEscape("%")
+	////sql := fmt.Sprintf("/%%")
 	//var list []user
-	//all, err := qs.Filter("username__contains", "%").All(&list)
+	//err = db.Debug().Table("student").Where("name LIKE ? ", sql).Find(&list).Error
 	//if err!=nil{
 	//	fmt.Println(err.Error())
-	//	return
 	//}
-	//fmt.Println(all)
-
+	//
+	//fmt.Println(list)
 }
+
+
+
+

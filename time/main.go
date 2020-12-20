@@ -5,11 +5,10 @@ import (
 	"time"
 )
 
+func usePrecise(dur time.Duration) bool {
+	return dur < time.Second || dur%time.Second != 0
+}
+
 func main() {
-	t := time.Now().UnixNano()
-	fmt.Println(t)
-	fmt.Println(t/ 1e6)
-	fmt.Println(t/ 1e9)
-	t = time.Now().Unix()
-	fmt.Println(t)
+	fmt.Println(usePrecise(time.Second))
 }

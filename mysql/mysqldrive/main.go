@@ -15,11 +15,12 @@ func main() {
 	if err := db.Ping(); err != nil {
 		log.Fatal(err)
 	}
-	rows, err := db.Query("SELECT name FROM student LIMIT 10")
-	var name string
+	rows, err := db.Query("SELECT name,number FROM student LIMIT 10")
+
+	var name, num string
 	for rows.Next() {
-		if err := rows.Scan(&name); err == nil {
-			log.Println(name)
+		if err := rows.Scan(&name, &num); err == nil {
+			log.Println(name, num)
 		} else {
 			log.Fatal(err)
 		}
