@@ -1,0 +1,6 @@
+syntax = "proto3";
+package hello;
+
+message Customer{
+  map <string, string> name = 1;
+}

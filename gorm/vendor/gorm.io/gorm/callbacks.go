@@ -102,9 +102,6 @@ func (p *processor) Execute(db *DB) {
 	}
 
 	for _, f := range p.fns {
-		//typ := reflect.TypeOf(f)
-		//name := typ.Name()
-		//fmt.Println(typ,name,db.Statement.ReflectValue)
 		f(db)
 	}
 

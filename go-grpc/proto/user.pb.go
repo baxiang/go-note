@@ -131,7 +131,9 @@ func init() {
 	proto.RegisterType((*UserResponse)(nil), "proto.UserResponse")
 }
 
-func init() { proto.RegisterFile("user.proto", fileDescriptor_116e343673f7ffaf) }
+func init() {
+	proto.RegisterFile("user.proto", fileDescriptor_116e343673f7ffaf)
+}
 
 var fileDescriptor_116e343673f7ffaf = []byte{
 	// 179 bytes of a gzipped FileDescriptorProto
@@ -151,11 +153,11 @@ var fileDescriptor_116e343673f7ffaf = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // UserInfoServiceClient is the client API for UserInfoService service.
 //
@@ -165,10 +167,10 @@ type UserInfoServiceClient interface {
 }
 
 type userInfoServiceClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewUserInfoServiceClient(cc *grpc.ClientConn) UserInfoServiceClient {
+func NewUserInfoServiceClient(cc grpc.ClientConnInterface) UserInfoServiceClient {
 	return &userInfoServiceClient{cc}
 }
 

@@ -3,21 +3,19 @@ package callbacks
 import (
 	"reflect"
 	"sort"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
-	"fmt"
+	//"fmt"
 )
 
 func SetupUpdateReflectValue(db *gorm.DB) {
-	//fmt.Println("SetupUpdateReflectValue1",db.Statement.ReflectValue)
 	if db.Error == nil && db.Statement.Schema != nil {
 		if !db.Statement.ReflectValue.CanAddr() || db.Statement.Model != db.Statement.Dest {
 			db.Statement.ReflectValue = reflect.ValueOf(db.Statement.Model)
 			for db.Statement.ReflectValue.Kind() == reflect.Ptr {
 				db.Statement.ReflectValue = db.Statement.ReflectValue.Elem()
-				//fmt.Println("SetupUpdateReflectValue2",db.Statement.ReflectValue)
-
 			}
 
 			if dest, ok := db.Statement.Dest.(map[string]interface{}); ok {
@@ -32,7 +30,6 @@ func SetupUpdateReflectValue(db *gorm.DB) {
 }
 
 func BeforeUpdate(db *gorm.DB) {
-
 	if db.Error == nil && db.Statement.Schema != nil && !db.Statement.SkipHooks && (db.Statement.Schema.BeforeSave || db.Statement.Schema.BeforeUpdate) {
 		callMethod(db, func(value interface{}, tx *gorm.DB) (called bool) {
 			if db.Statement.Schema.BeforeSave {
@@ -61,6 +58,7 @@ func Update(db *gorm.DB) {
 				db.Statement.AddClause(c)
 			}
 		}
+
 		if db.Statement.SQL.String() == "" {
 			db.Statement.SQL.Grow(180)
 			db.Statement.AddClauseIfNotExists(clause.Update{})
@@ -73,7 +71,6 @@ func Update(db *gorm.DB) {
 		}
 
 		if _, ok := db.Statement.Clauses["WHERE"]; !db.AllowGlobalUpdate && !ok {
-			fmt.Println("xxxx")
 			db.AddError(gorm.ErrMissingWhereClause)
 			return
 		}
@@ -117,6 +114,7 @@ func ConvertToAssignments(stmt *gorm.Statement) (set clause.Set) {
 		selectColumns, restricted = stmt.SelectAndOmitColumns(false, true)
 		assignValue               func(field *schema.Field, value interface{})
 	)
+
 	switch stmt.ReflectValue.Kind() {
 	case reflect.Slice, reflect.Array:
 		assignValue = func(field *schema.Field, value interface{}) {
@@ -139,8 +137,7 @@ func ConvertToAssignments(stmt *gorm.Statement) (set clause.Set) {
 	for updatingValue.Kind() == reflect.Ptr {
 		updatingValue = updatingValue.Elem()
 	}
-
-
+   
 	if !updatingValue.CanAddr() || stmt.Dest != stmt.Model {
 		switch stmt.ReflectValue.Kind() {
 		case reflect.Slice, reflect.Array:
@@ -169,7 +166,6 @@ func ConvertToAssignments(stmt *gorm.Statement) (set clause.Set) {
 
 	switch value := updatingValue.Interface().(type) {
 	case map[string]interface{}:
-
 		set = make([]clause.Assignment, 0, len(value))
 
 		keys := make([]string, 0, len(value))
@@ -187,15 +183,9 @@ func ConvertToAssignments(stmt *gorm.Statement) (set clause.Set) {
 			if stmt.Schema != nil {
 				if field := stmt.Schema.LookUpField(k); field != nil {
 					if field.DBName != "" {
-
 						if v, ok := selectColumns[field.DBName]; (ok && v) || (!ok && !restricted) {
-							if !field.PrimaryKey{
-								set = append(set, clause.Assignment{Column: clause.Column{Name: field.DBName}, Value: kv})
-								assignValue(field, value[k])
-							}else {
-								stmt.AddClause(clause.Where{Exprs: []clause.Expression{clause.Eq{Column: field.DBName, Value: kv}}})
-							}
-
+							set = append(set, clause.Assignment{Column: clause.Column{Name: field.DBName}, Value: kv})
+							assignValue(field, value[k])
 						}
 					} else if v, ok := selectColumns[field.Name]; (ok && v) || (!ok && !restricted) {
 						assignValue(field, value[k])
@@ -231,18 +221,20 @@ func ConvertToAssignments(stmt *gorm.Statement) (set clause.Set) {
 			}
 		}
 	default:
-
 		switch updatingValue.Kind() {
 		case reflect.Struct:
 			set = make([]clause.Assignment, 0, len(stmt.Schema.FieldsByDBName))
 			for _, dbName := range stmt.Schema.DBNames {
-
 				field := stmt.Schema.LookUpField(dbName)
-				if !field.PrimaryKey && (!updatingValue.CanAddr() || stmt.Dest != stmt.Model) {
-					//v1, ok1 := selectColumns[field.DBName]
+				if !field.PrimaryKey || (!updatingValue.CanAddr() || stmt.Dest != stmt.Model) {
+					//if field.PrimaryKey{
+					//	if value, isZero := field.ValueOf(updatingValue); !isZero {
+					//		stmt.AddClause(clause.Where{Exprs: []clause.Expression{clause.Eq{Column: field.DBName, Value: value}}})
+					//	}
+					//	continue
+					//}
 					if v, ok := selectColumns[field.DBName]; (ok && v) || (!ok && !restricted) {
 						value, isZero := field.ValueOf(updatingValue)
-
 						if !stmt.SkipHooks {
 							if field.AutoUpdateTime > 0 {
 								if field.AutoUpdateTime == schema.UnixNanosecond {

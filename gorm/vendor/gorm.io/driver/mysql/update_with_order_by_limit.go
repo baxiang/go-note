@@ -4,11 +4,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/callbacks"
 	"gorm.io/gorm/clause"
-	"fmt"
 )
 
 func Update(db *gorm.DB) {
-	fmt.Println(db.Statement.ReflectValue)
 	if db.Error == nil {
 		if db.Statement.Schema != nil && !db.Statement.Unscoped {
 			for _, c := range db.Statement.Schema.UpdateClauses {
@@ -16,9 +14,7 @@ func Update(db *gorm.DB) {
 			}
 		}
 
-
 		if db.Statement.SQL.String() == "" {
-
 			db.Statement.SQL.Grow(180)
 			db.Statement.AddClauseIfNotExists(clause.Update{})
 			if set := callbacks.ConvertToAssignments(db.Statement); len(set) != 0 {
