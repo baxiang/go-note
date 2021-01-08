@@ -18,6 +18,9 @@ message GetTagListResp {
   repeated Tag tags = 1;
   Pager pager = 2;
 }
+
 service TagService {
-  rpc GetTagList(GetTagListReq) returns (GetTagListResp){}
+  rpc GetTagList (GetTagListReq) returns (GetTagListResp) {
+
+  }
 }
