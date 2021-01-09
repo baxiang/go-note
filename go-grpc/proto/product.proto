@@ -1,0 +1,10 @@
+syntax = "proto3";
+package services;
+
+message productReq{
+  int32 prod_id = 1;
+}
+
+message productResp{
+  int32 prod_stock = 1;
+}
