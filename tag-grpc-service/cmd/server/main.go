@@ -22,8 +22,8 @@ func init() {
 
 func main() {
 	ctx := context.Background()
-	newCtx := metadata.AppendToOutgoingContext(ctx, "eddycjy", "Go语言编程之旅")
-	clientConn, err := GetClientConn(newCtx, "localhost:8004", []grpc.DialOption{grpc.WithUnaryInterceptor(
+	newCtx := metadata.AppendToOutgoingContext(ctx, "hello", "Go")
+	clientConn, err := GetClientConn(newCtx, "127.0.0.1:8004", []grpc.DialOption{grpc.WithUnaryInterceptor(
 		grpc_middleware.ChainUnaryClient(
 			middleware.UnaryContextTimeout(),
 			middleware.ClientTracing(),

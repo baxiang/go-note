@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package user;
+
+//引入google api实现http转rpc
+import "google/api/annotations.proto";
+
+
+message UserRequest{
+  // [修饰符] 类型 字段名 = 标识符
+  string name = 1;
+}
+
+message UserResponse{
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  repeated string title = 4; // 可变数组，即 slice 类型
+}
+
+service userInfoService {
+  rpc GetUserInfo(UserRequest) returns (UserResponse){
+    option (google.api.http) = {
+      post: "/v1/userInfo"
+      body: "*"
+    };
+  }
+}

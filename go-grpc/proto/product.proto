@@ -8,3 +8,7 @@ message productReq{
 message productResp{
   int32 prod_stock = 1;
 }
+
+service productSvc{
+  rpc GetProdStock(productReq) returns (productResp);
+}

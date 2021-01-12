@@ -15,12 +15,11 @@ type UserInfoService struct{}
 //实现 interface
 func (s *UserInfoService) GetUserInfo(ctx context.Context, req *proto.UserRequest) (resp *proto.UserResponse, err error) {
 	resp = &proto.UserResponse{
-		Id:    1568,
+		Id:    1,
 		Name:  req.Name,
 		Age:   25,
 		Title: []string{"Java", "Go"},
 	}
-
 	return
 }
 
@@ -38,5 +37,5 @@ func main() {
 	// 注意第二个参数 UserInfoServiceServer 是接口类型的变量
 	// 需要取地址传参
 	proto.RegisterUserInfoServiceServer(s, &UserInfoService{})
-	s.Serve(l)
+	log.Fatal(s.Serve(l))
 }
